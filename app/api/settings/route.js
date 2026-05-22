@@ -1,7 +1,10 @@
+import { NextResponse } from "next/server";
 import { connectDb } from "@/lib/mongodb";
-import { verifyFirebaseToken, getUserProfile } from "@/lib/firebase-admin";
-import { jsonError, jsonSuccess } from "@/lib/api-response";
+import { getUserProfile } from "@/lib/firebase-admin";
+import { jsonSuccess } from "@/lib/api-response";
 import { z } from "zod";
+import { withErrorHandler, authenticateRequest } from "@/lib/error-handler";
+import { ValidationError, ForbiddenError } from "@/lib/errors";
 
 const settingsSchema = z.object({
   userId: z.string().optional(),
@@ -73,50 +76,41 @@ const settingsSchema = z.object({
   }).strict().optional(),
 }).strict();
 
-export async function PATCH(request) {
-  try {
-    const authorization = request.headers.get("authorization");
-    const token = authorization?.split(" ")[1];
+export const PATCH = withErrorHandler(async (request) => {
+  const decodedToken = await authenticateRequest(request);
 
-   const authResult = await verifyFirebaseToken(token);
+  const body = await request.json();
+  const parsed = settingsSchema.safeParse(body);
 
-    if (!decodedToken) {
-      return jsonError("Unauthorized", 401);
-    }
-
-    const body = await request.json();
-    const parsed = settingsSchema.safeParse(body);
-
-    if (!parsed.success) {
-      return jsonError("Bad Request: Unrecognized or invalid fields.", 400);
-    }
-
-    const { userId: bodyUserId, ...settings } = parsed.data;
-    
-    let targetUserId = decodedToken.uid;
-    let isOperatorAdmin = false;
-
-    if (bodyUserId && bodyUserId !== decodedToken.uid) {
-      const profile = await getUserProfile(decodedToken.uid);
-      if (!profile || profile.role !== "admin") {
-        return jsonError("Forbidden: You are not authorized to update another user's settings.", 403);
-      }
-      targetUserId = bodyUserId;
-      isOperatorAdmin = true;
-    }
-
-    const db = await connectDb();
-
-    await db.collection("settings").updateOne(
-      { userId: targetUserId },
-      { $set: { ...settings, updatedAt: new Date() } },
-      { upsert: true }
-    );
-
-
-    return jsonSuccess({ message: "Settings saved successfully" }, 200);
-  } catch (error) {
-    console.error("Settings save error:", error);
-    return jsonError("Failed to save settings", 500);
+  if (!parsed.success) {
+    throw new ValidationError("Bad Request: Unrecognized or invalid fields.");
   }
-}
+
+  const { userId: bodyUserId, ...settings } = parsed.data;
+  
+  let targetUserId = decodedToken.uid;
+  let isOperatorAdmin = false;
+
+  if (bodyUserId && bodyUserId !== decodedToken.uid) {
+    const profile = await getUserProfile(decodedToken.uid);
+    if (!profile || profile.role !== "admin") {
+      throw new ForbiddenError("Forbidden: You are not authorized to update another user's settings.");
+    }
+    targetUserId = bodyUserId;
+    isOperatorAdmin = true;
+  }
+
+  const db = await connectDb();
+
+  await db.collection("settings").updateOne(
+    { userId: targetUserId },
+    { $set: { ...settings, updatedAt: new Date() } },
+    { upsert: true }
+  );
+
+  console.log(
+    `[Audit Log] Settings updated successfully for target user: ${targetUserId} by operator: ${decodedToken.uid} (Role: ${isOperatorAdmin ? "admin" : "owner"})`
+  );
+
+  return NextResponse.json({ message: "Settings saved successfully" });
+});
