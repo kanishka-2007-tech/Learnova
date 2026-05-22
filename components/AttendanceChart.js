@@ -1,19 +1,6 @@
 "use client";
+
 import { useState } from "react";
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
 
 const weeklyData = [
   { day: "Mon", attendance: 100 },
@@ -40,9 +27,15 @@ const subjectData = [
 ];
 
 const getColor = (value) => {
-  if (value >= 75) return "#22c55e";
-  if (value >= 60) return "#eab308";
-  return "#ef4444";
+  if (value >= 75) return "bg-green-500";
+  if (value >= 60) return "bg-yellow-500";
+  return "bg-red-500";
+};
+
+const getTextColor = (value) => {
+  if (value >= 75) return "text-green-400";
+  if (value >= 60) return "text-yellow-400";
+  return "text-red-400";
 };
 
 export default function AttendanceChart() {
@@ -59,16 +52,26 @@ export default function AttendanceChart() {
       {/* Overall Badge */}
       <div className="flex items-center space-x-4 mb-6">
         <div
-          className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-lg border-4"
-          style={{ borderColor: getColor(overallAttendance) }}
+          className={`w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-lg border-4 ${
+            overallAttendance >= 75
+              ? "border-green-500"
+              : overallAttendance >= 60
+              ? "border-yellow-500"
+              : "border-red-500"
+          }`}
         >
           {overallAttendance}%
         </div>
+
         <div>
-          <p className="text-white font-medium">Overall Attendance</p>
+          <p className="text-white font-medium">
+            Overall Attendance
+          </p>
+
           <p
-            className="text-sm font-medium"
-            style={{ color: getColor(overallAttendance) }}
+            className={`text-sm font-medium ${getTextColor(
+              overallAttendance
+            )}`}
           >
             {overallAttendance >= 75
               ? "✅ Good Standing"
@@ -96,63 +99,90 @@ export default function AttendanceChart() {
         ))}
       </div>
 
-      {/* Weekly Chart */}
+      {/* Weekly */}
       {activeTab === "weekly" && (
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={weeklyData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-            <XAxis dataKey="day" stroke="#ffffff80" />
-            <YAxis stroke="#ffffff80" domain={[0, 100]} />
-            <Tooltip
-              contentStyle={{ backgroundColor: "#1e1e2e", border: "none", borderRadius: "8px" }}
-              labelStyle={{ color: "#fff" }}
-            />
-            <Bar dataKey="attendance" radius={[4, 4, 0, 0]}>
-              {weeklyData.map((entry, index) => (
-                <Cell key={index} fill={getColor(entry.attendance)} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      )}
-
-      {/* Monthly Chart */}
-      {activeTab === "monthly" && (
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={monthlyData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-            <XAxis dataKey="month" stroke="#ffffff80" />
-            <YAxis stroke="#ffffff80" domain={[0, 100]} />
-            <Tooltip
-              contentStyle={{ backgroundColor: "#1e1e2e", border: "none", borderRadius: "8px" }}
-              labelStyle={{ color: "#fff" }}
-            />
-            <Line
-              type="monotone"
-              dataKey="attendance"
-              stroke="#3b82f6"
-              strokeWidth={2}
-              dot={{ fill: "#3b82f6", r: 4 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      )}
-
-      {/* Subject wise */}
-      {activeTab === "subjects" && (
-        <div className="space-y-3">
-          {subjectData.map((item) => (
-            <div key={item.subject} className="flex items-center space-x-3">
-              <p className="text-white/80 text-sm w-16">{item.subject}</p>
-              <div className="flex-1 bg-white/10 rounded-full h-3">
+        <div className="flex items-end justify-between gap-3 h-56">
+          {weeklyData.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col items-center flex-1"
+            >
+              <div className="relative w-full flex items-end h-44">
                 <div
-                  className="h-3 rounded-full transition-all duration-500"
+                  className={`w-full rounded-t-xl transition-all duration-500 hover:scale-105 ${getColor(
+                    item.attendance
+                  )}`}
                   style={{
-                    width: `${item.attendance}%`,
-                    backgroundColor: getColor(item.attendance),
+                    height: `${item.attendance}%`,
                   }}
                 />
               </div>
+
+              <div className="mt-2 text-xs text-gray-400">
+                {item.day}
+              </div>
+
+              <div className="text-sm font-semibold text-white mt-1">
+                {item.attendance}%
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Monthly */}
+      {activeTab === "monthly" && (
+        <div className="space-y-4">
+          {monthlyData.map((item, index) => (
+            <div key={index}>
+              <div className="flex justify-between mb-1">
+                <span className="text-white text-sm">
+                  {item.month}
+                </span>
+
+                <span className="text-white text-sm">
+                  {item.attendance}%
+                </span>
+              </div>
+
+              <div className="w-full bg-white/10 rounded-full h-3">
+                <div
+                  className={`h-3 rounded-full transition-all duration-500 ${getColor(
+                    item.attendance
+                  )}`}
+                  style={{
+                    width: `${item.attendance}%`,
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Subjects */}
+      {activeTab === "subjects" && (
+        <div className="space-y-3">
+          {subjectData.map((item) => (
+            <div
+              key={item.subject}
+              className="flex items-center space-x-3"
+            >
+              <p className="text-white/80 text-sm w-20">
+                {item.subject}
+              </p>
+
+              <div className="flex-1 bg-white/10 rounded-full h-3">
+                <div
+                  className={`h-3 rounded-full transition-all duration-500 ${getColor(
+                    item.attendance
+                  )}`}
+                  style={{
+                    width: `${item.attendance}%`,
+                  }}
+                />
+              </div>
+
               <p className="text-white text-sm w-10 text-right">
                 {item.attendance}%
               </p>
@@ -162,15 +192,20 @@ export default function AttendanceChart() {
       )}
 
       {/* Legend */}
-      <div className="flex space-x-4 mt-4">
+      <div className="flex flex-wrap gap-4 mt-6">
         <span className="flex items-center text-xs text-white/60">
-          <span className="w-3 h-3 rounded-full bg-green-500 mr-1" /> Good (≥75%)
+          <span className="w-3 h-3 rounded-full bg-green-500 mr-1" />
+          Good (≥75%)
         </span>
+
         <span className="flex items-center text-xs text-white/60">
-          <span className="w-3 h-3 rounded-full bg-yellow-500 mr-1" /> At Risk (60-75%)
+          <span className="w-3 h-3 rounded-full bg-yellow-500 mr-1" />
+          At Risk (60-75%)
         </span>
+
         <span className="flex items-center text-xs text-white/60">
-          <span className="w-3 h-3 rounded-full bg-red-500 mr-1" /> Critical (&lt;60%)
+          <span className="w-3 h-3 rounded-full bg-red-500 mr-1" />
+          Critical (&lt;60%)
         </span>
       </div>
     </div>
