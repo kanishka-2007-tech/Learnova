@@ -35,7 +35,7 @@ import {
 } from "@/constants/mockData";
 
 const AttendanceHeatmap = dynamic(
-  () => import("./AttendanceHeatmap"),
+  () => import("./AttendanceHeatmap.jsx"),
   {
     ssr: false,
     loading: () => <ChartSkeleton variant="heatmap" />,
@@ -487,7 +487,7 @@ const StudentDashboard = () => {
             </div>
 
             {/* Heatmap */}
-            <AttendanceHeatmap />
+            <AttendanceHeatmap recentActivity={recentActivity} />
           </div>
 
           {/* Right */}
