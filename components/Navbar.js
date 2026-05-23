@@ -266,7 +266,7 @@ export function Navbar() {
                     className={`px-4 py-2 rounded-lg transition-all duration-300 ${
                       isActive
                         ? "bg-accent/20 text-gray-950 dark:text-white font-medium"
-                        : "text-gray-700 dark:text-gray-200 hover:text-gray-950 dark:hover:text-white hover:bg-accent/10"
+                        : "text-gray-800 dark:text-gray-100 hover:text-gray-950 dark:hover:text-white hover:bg-accent/10"
                     }`}
                   >
                     {item.label}
