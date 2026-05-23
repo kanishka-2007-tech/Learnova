@@ -133,10 +133,10 @@ export default function FaceRecognizer({ authUser }) {
           videoRef.current.srcObject = stream;
           videoRef.current.onloadedmetadata = () => {
             videoRef.current.play();
-            setIsLoading(false);
             setMessage("Building face models...");
 
             buildFaceMatcher().then(() => {
+              setIsLoading(false);
               setMessage("Looking for faces...");
               setLivenessState("DETECTING_FACE");
               
@@ -442,7 +442,7 @@ export default function FaceRecognizer({ authUser }) {
           <div className="absolute inset-0 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm z-40">
             <div className="text-center space-y-4">
               <div className="w-16 h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto" />
-              <p className="text-white font-medium">Initializing Camera...</p>
+              <p className="text-white font-medium">{message}</p>
             </div>
           </div>
         )}
