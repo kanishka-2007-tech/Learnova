@@ -22,6 +22,7 @@ import {
   Clock,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useTheme } from "next-themes";
 
 import { useAuthContext } from "@/contexts/AuthContext";
@@ -676,7 +677,7 @@ const LearnovaChatbot = () => {
                   {/* Bubble */}
                   <div className={`px-4 py-3 rounded-2xl shadow-sm ${message.isBot ? t.botMsg : t.userMsg}`}>
                     {message.isBot ? (
-                      <ReactMarkdown components={markdownComponents}>
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                         {message.text}
                       </ReactMarkdown>
                     ) : (
