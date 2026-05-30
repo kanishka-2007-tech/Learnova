@@ -397,30 +397,9 @@ Found a security vulnerability? Please report it responsibly to **security@learn
 | <a href="https://github.com/Shrutika-Dahale"><img src="https://github.com/Shrutika-Dahale.png?size=60" width="52" height="52" alt="Shrutika-Dahale"/></a><br>@Shrutika-Dahale |  |  |  |  |
 <!-- CONTRIBUTORS:END -->
 
-/**
-## ✨ README Improvement Notes
+---
 
-### 📌 Formatting Enhancements Needed
-- Improve heading hierarchy for better readability
-- Ensure consistent spacing between sections
-- Use proper Markdown formatting for code blocks and lists
-- Align all installation and usage steps properly
+## 🏗️ System Architecture Blueprint
 
-### 🚀 Suggested Structure Upgrade
-- Introduction
-- Features
-- Tech Stack
-- Installation
-- Usage
-- Project Structure
-- Contribution Guidelines
-- License
+Want to learn more about how Learnova's underlying technology behaves under the hood? Read our detailed, Mermaid-enhanced [System Architecture Guide](file:///e:/Learnova/Learnova/docs/ARCHITECTURE.md) to understand routing middleware verification, neural network face detection thresholds, and offline PWA queues.
 
-### 🛠️ Documentation Improvements
-- Add badges (optional): build, license, contributors
-- Add screenshots for better UI understanding
-- Standardize code blocks for commands
-
-### 🎯 Goal
-Improve onboarding experience for new contributors and users by making README more structured, readable, and professional.
-*/ 
