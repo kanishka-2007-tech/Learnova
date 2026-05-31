@@ -19,6 +19,7 @@ import {
   Calendar,
   UserCheck,
   BarChart3,
+  Brain,
 } from "lucide-react";
 
 // --- Mock Data & Constants ---
@@ -73,7 +74,17 @@ const FEATURES = [
     description: "Identify struggling students early and gauge curriculum velocity with advanced data dashboards.",
     color: "text-emerald-500",
     bg: "bg-emerald-500/10"
-  }
+  },
+
+  {
+  icon: Brain,
+  title: "AI Study Planner",
+  description:
+    "Generate personalized daily study plans, weekly goals, revision schedules, and topic prioritization based on your goals and available study time.",
+  color: "text-pink-500",
+  bg: "bg-pink-500/10",
+  href: "/timetable"
+}
 ];
 
 const ROLE_DATA = {
@@ -356,12 +367,13 @@ export default function Page() {
               </p>
             </Reveal>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {FEATURES.map((feat, i) => {
                 const IconComp = feat.icon;
                 return (
                   <Reveal key={i} delay={i * 0.1}>
-                    <div className="h-full p-6 bg-white dark:bg-zinc-900/40 border border-gray-200/60 dark:border-white/5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+  <Link href={feat.href || "#"} className="block h-full">
+    <div className="h-full p-6 bg-white dark:bg-zinc-900/40 border border-gray-200/60 dark:border-white/5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 cursor-pointer">
                       <div>
                         <div className={`w-12 h-12 ${feat.bg} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
                           <IconComp className={`w-6 h-6 ${feat.color}`} />
@@ -370,6 +382,7 @@ export default function Page() {
                         <p className="text-sm text-muted-foreground leading-relaxed">{feat.description}</p>
                       </div>
                     </div>
+                  </Link>
                   </Reveal>
                 );
               })}
