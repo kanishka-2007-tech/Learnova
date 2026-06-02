@@ -4,6 +4,7 @@ import { requireRole } from "@/lib/rbac";
 import { AppError } from "@/lib/errors";
 import { checkRateLimit } from "@/lib/rateLimit";
 import admin from "firebase-admin";
+import { AggregateField } from "firebase-admin/firestore";
 import {
   DEFAULT_SYSTEM_METRICS,
   DEFAULT_CRITICAL_ALERTS,
@@ -37,11 +38,12 @@ export const GET = withErrorHandler(async (request) => {
     const activeCountSnap = await db.collection("institutes").where("status", "==", "active").count().get();
     const activeInstitutes = activeCountSnap.data().count || 0;
 
-    // Fetch the aggregate sum of issues field for pending issues count
-    const allInstitutesSnap = await db.collection("institutes")
-      .select("issues")
-      .get();
-    const pendingIssues = allInstitutesSnap.docs.reduce((sum, doc) => sum + (doc.data().issues || 0), 0);
+    // Fetch the aggregate sum of issues field using Firestore server-side aggregation
+    const sumQuery = db.collection("institutes").aggregate({
+      totalIssues: AggregateField.sum("issues")
+    });
+    const allInstitutesSnap = await sumQuery.get();
+    const pendingIssues = allInstitutesSnap.data().totalIssues || 0;
 
     const instSnapshot = await db.collection("institutes")
       .select("name", "status", "issues")

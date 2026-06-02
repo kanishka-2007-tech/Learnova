@@ -245,7 +245,6 @@ export const useAuth = () => {
           deleteCookie("authToken");
           deleteCookie("userRole");
 
-          // Clear only auth-sensitive caches and preserve static/app shell caches
           await clearAuthSensitiveCaches();
           if (isMounted()) setLoading(false);
         }
@@ -298,7 +297,6 @@ export const useAuth = () => {
       // Critical Security Fix: Clear authentication cookies to prevent zombie sessions in Next.js middleware
       deleteCookie("userRole");
 
-      // Clear only auth-sensitive caches and preserve static/app shell caches
       await clearAuthSensitiveCaches();
     } catch (err) {
       if (isMounted()) setError(err.message);

@@ -23,12 +23,12 @@ const CATEGORIES = [
   { id: "general", label: "General" },
   { id: "technical", label: "Technical" },
 ];
-// ── Modal State for Issue #2008 ──────────
+const SmartNoticeBoard = () => {
+  // ── Modal State for Issue #2008 ──────────
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [noticeTitle, setNoticeTitle] = useState("");
   const [noticeDescription, setNoticeDescription] = useState("");
 
-const SmartNoticeBoard = () => {
   const { user, userProfile, loading: authLoading } = useAuth();
 
   // ── Consume the shared pooled subscription from FirestoreContext ──────────

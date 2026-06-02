@@ -354,12 +354,11 @@ export default function RootLayout({ children }) {
 
             {/* ── Client-only layout: modals, chatbot, PWA install, streak sync ── */}
             <ClientLayout />
-
-            {/* ── Back-to-top floating button ── */}
             <BackToTop />
 
             {/* ── Screen-reader route announcer for accessibility ── */}
             <RouteAnnouncer />
+            <OfflineIndicator />
 
             {/* Single Toaster configuration */}
             <Toaster
@@ -370,8 +369,11 @@ export default function RootLayout({ children }) {
               }}
             />
 
-            <OfflineIndicator />
             <CommandPaletteWrapper />
+            
+            {/* 🚀 ADDED: System Shortcuts Modal integration layer */}
+            <ShortcutsModal />
+            <CommandPalette />
 
             {/* 🚀 ADDED: System Shortcuts Modal integration layer */}
             <ShortcutsModal />
