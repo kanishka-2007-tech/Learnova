@@ -37,6 +37,11 @@ const syncCustomClaims = async ({ user, role, fullName }) => {
     if (response.ok) {
       // Force refresh token so the custom claims are present in the client-side session immediately
       await user.getIdToken(true).catch(() => {});
+    } else {
+      const errorData = await response.json().catch(() => ({}));
+      if (errorData?.error?.includes('already registered')) {
+        await user.getIdToken(true).catch(() => {});
+      }
     }
   } catch {
     // Keep login non-blocking if claim migration fails.

@@ -91,6 +91,11 @@ export async function POST(req) {
       }
     }
 
+    // Set Firebase custom claims for all created auth users
+    await Promise.all(createdAuthUids.map(uid =>
+      admin.auth().setCustomUserClaims(uid, { role: 'student' })
+    ));
+
     // Build firebaseUid map: email → uid
     const emailToUid = new Map();
     const allAuthUsers = await admin.auth().getUsers(authIdentifiers);
