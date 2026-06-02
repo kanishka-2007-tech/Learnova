@@ -20,10 +20,8 @@ import {
   Sparkles,
   Copy,
   CalendarPlus,
-  Link as LinkIcon
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { apiFetch } from "@/lib/apiClient";
 
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -118,7 +116,7 @@ export default function Timetable({ role = "student" }) {
       if (!user) return;
       try {
         const token = await user.getIdToken();
-        const res = await apiFetch("/api/timetable/sync", {
+        const res = await fetch("/api/timetable/sync", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
@@ -171,7 +169,7 @@ export default function Timetable({ role = "student" }) {
       setIsSyncing(true);
       try {
         const token = await user.getIdToken();
-        const res = await apiFetch("/api/timetable/sync", {
+        const res = await fetch("/api/timetable/sync", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
