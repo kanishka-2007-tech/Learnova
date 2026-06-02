@@ -207,7 +207,7 @@ export async function GET(request) {
           createdAt: { $gte: cooldownDate }
         });
 
-        if (!evaluation.isBelowThreshold) {
+        if (recentLog) {
           continue;
         }
 
