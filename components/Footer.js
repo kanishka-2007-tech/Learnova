@@ -126,24 +126,26 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-xs font-semibold uppercase tracking-[0.28em] text-white/90 sm:text-sm">Quick Links</h3>
             <ul className="grid grid-cols-2 gap-3 sm:block sm:space-y-3">
-           <div className="flex items-center gap-3">
-  {socialLinks.map((s) => (
-    <SocialIcon key={s.label} {...s} />
-  ))}
+            <li className="flex items-center gap-3">
+                {socialLinks.map((s) => (
+                  <SocialIcon key={s.label} {...s} />
+                ))}
 
-  <motion.a
-    href="https://discord.gg/"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Discord"
-    whileHover={{ scale: 1.15, y: -3 }}
-    whileTap={{ scale: 0.95 }}
-    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 hover:border-purple-500/50 hover:text-purple-400"
-  >
-    <FaDiscord size={18} />
-  </motion.a>
-</div>
-      </div>    {/* Quick Links */}
+                  <motion.a
+                    href="https://discord.gg/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Discord"
+                    whileHover={{ scale: 1.15, y: -3 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 hover:border-purple-500/50 hover:text-purple-400"
+                  >
+                    <FaDiscord size={18} />
+                  </motion.a>
+             </li>
+            </ul>
+          </div>
+          {/* Quick Links */}
           <div className="space-y-5">
             <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-white/90">Quick Links</h3>
             <ul className="space-y-3">
@@ -160,27 +162,21 @@ export default function Footer() {
             <ul className="grid grid-cols-2 gap-3 sm:block sm:space-y-3">
               {sectionLinks.map((link) => <FooterLink key={link.href} href={link.href}>{link.label}</FooterLink>)}
             </ul>
+          </div>      
           <div className="space-y-5">
             <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-white/90">Sections</h3>
            
            <ul className="space-y-3">
- {sectionLinks.map((link) => (
-  <FooterLink key={link.href} href={link.href}>
-    {link.label}
-  </FooterLink>
-))}
-
-  
-  
-</ul>
+            {sectionLinks.map((link) => (
+              <FooterLink key={link.href} href={link.href}>
+                {link.label}
+              </FooterLink>
+            ))}
+            </ul>
           </div>
           
 
-          {/* Contact Column */}
-          <div className="space-y-5">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.28em] text-white/90 sm:text-sm">Contact</h3>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs text-slate-300 space-y-2 sm:rounded-2xl">
-              <p className="break-all">Email: {CONTACT_INFO.email}</p>
+         
           {/* Contact Column with Integrated Modern Campus Card */}
           <div className="space-y-6">
             <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-white/90">Contact</h3>
