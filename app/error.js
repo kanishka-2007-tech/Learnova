@@ -1,10 +1,16 @@
-"use client";
+'use client';
 
-export default function Error({
-  error,
-  reset,
-}) {
-  console.error("Application Error:", error);
+import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
+
+export default function Error({ error, reset }) {
+  const t = useTranslations('common');
+
+  useEffect(() => {
+    console.error('Runtime error:', error?.message ?? 'Unknown error', {
+      digest: error?.digest,
+    });
+  }, [error]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
@@ -13,16 +19,21 @@ export default function Error({
       </h1>
 
       <p className="text-gray-600 mb-6">
-        Something went wrong while loading data.
-        Please check your connection or try again.
+        Something went wrong while loading this page.
       </p>
 
       <button
         onClick={() => reset()}
-        className="px-5 py-2 rounded bg-black text-white hover:opacity-80"
+        className="px-5 py-2 rounded bg-black text-white hover:opacity-80 mb-6"
       >
-        Retry
+        Try Again
       </button>
+
+      {error?.digest && (
+        <p className="text-xs text-gray-400 font-mono select-all">
+          Error ID: {error.digest}
+        </p>
+      )}
     </div>
   );
 }
